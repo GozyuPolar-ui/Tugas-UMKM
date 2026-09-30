@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Kelola produk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="cek">
+  <nav class="topbar">
+    <div class="wrap">
+      <strong id="nama-toko"></strong>
+      <a href="pesanan.html">Pesanan</a>
+      <a href="produk.html" aria-current="page">Produk</a>
+      <a href="../index.html" target="_blank" rel="noopener">Lihat katalog</a>
+      <button type="button" id="btn-keluar">Keluar</button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Produk</h1>
+      <button type="button" class="btn" id="btn-tambah">Tambah produk</button>
+    </div>
+
+    <div class="tabel-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Foto</th><th>Nama</th><th>Harga</th><th>Stok</th><th>Tampil</th><th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="catatan">Produk yang tidak ditampilkan tidak muncul di katalog</p>
+  </main>
+
+  <dialog id="modal" aria-labelledby="judul-modal">
+    <form id="form" novalidate>
+      <h2 id="judul-modal"></h2>
+
+      <label>Nama produk
+        <input type="text" name="nama" maxlength="120">
+      </label>
+      <label>Deskripsi
+        <textarea name="deskripsi" rows="3" maxlength="500"></textarea>
+      </label>
+      <div class="baris">
+        <label>Harga (Rp)
+          <input type="number" name="harga" min="0" step="500" inputmode="numeric">
+        </label>
+        <label>Stok
+          <input type="number" name="stok" min="0" step="1" inputmode="numeric">
+        </label>
+      </div>
+      <label>Foto
+        <input type="file" name="foto" accept="image/jpeg,image/png,image/webp">
+      </label>
+      <div class="preview" id="preview" hidden><img alt="Pratinjau foto"></div>
+      <label class="cek-baris">
+        <input type="checkbox" name="aktif" checked> Tampilkan di katalog
+      </label>
+
+      <p class="galat" id="galat" role="alert"></p>
+      <div class="aksi-modal">
+        <button type="button" class="btn abu" id="batal">Batal</button>
+        <button type="submit" class="btn" id="btn-simpan">Simpan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin/produk.js"></script>
+</body>
+</html>

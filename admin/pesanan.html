@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Pesanan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="cek">
+  <nav class="topbar">
+    <div class="wrap">
+      <strong id="nama-toko"></strong>
+      <a href="pesanan.html" aria-current="page">Pesanan</a>
+      <a href="produk.html">Produk</a>
+      <a href="../index.html" target="_blank" rel="noopener">Lihat katalog</a>
+      <button type="button" id="btn-keluar">Keluar</button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Pesanan</h1>
+      <button type="button" class="btn abu" id="btn-muat">Muat ulang</button>
+    </div>
+
+    <section class="ringkasan" id="ringkasan" aria-label="Ringkasan pesanan"></section>
+
+    <div class="filter" id="filter" role="group" aria-label="Filter status"></div>
+
+    <div class="tabel-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th><th>Waktu</th><th>Produk</th><th>Total</th><th>Pembeli</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="catatan">Pesanan yang dibatalkan mengembalikan stok otomatis dan statusnya dikunci. Kalau salah batal, minta pembeli memesan lagi.</p>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin/pesanan.js"></script>
+</body>
+</html>
