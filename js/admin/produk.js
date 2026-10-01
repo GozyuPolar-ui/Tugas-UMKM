@@ -88,6 +88,7 @@ function bukaForm(p = null) {
     form.harga.value = p.harga;
     form.stok.value = p.stok;
     form.aktif.checked = p.is_active;
+        form.best.checked = p.is_best;
   } else {
     form.stok.value = 0;
   }
@@ -175,6 +176,7 @@ form.addEventListener('submit', async e => {
       harga,
       stok,
       is_active: form.aktif.checked,
+            is_best: form.best.checked,
       foto: fotoBaru ?? (sedangEdit ? sedangEdit.foto : null)
     };
 

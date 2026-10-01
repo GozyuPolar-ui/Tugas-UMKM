@@ -1,5 +1,5 @@
 // js/katalog.js
-// Katalog + modal detail + kirim pesanan (simpan ke Supabase, lalu buka WhatsApp).
+// Katalog (Best Seller + Menu) + modal detail + kirim pesanan (simpan ke Supabase, lalu buka WhatsApp).
 
 const TOKO = CONFIG.TOKO;
 let produk = [];
@@ -8,13 +8,26 @@ let produk = [];
 const $ = id => document.getElementById(id);
 const rupiah = n => 'Rp' + Number(n).toLocaleString('id-ID');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const modal = $('modal'), isi = $('isi'), grid = $('grid');
+const modal = $('modal'), isi = $('isi'), daftar = $('daftar');
+
+// 10000 -> "10k", 6500 -> "6,5k", 750 -> "Rp750"
+function hargaSingkat(h) {
+  if (h < 1000) return 'Rp' + h;
+  const k = h / 1000;
+  return (Number.isInteger(k) ? k : k.toFixed(1).replace('.', ',')) + 'k';
+}
 
 // ---------- profil toko ----------
 $('toko-nama').textContent = TOKO.nama;
 $('toko-tagline').textContent = TOKO.tagline;
 $('toko-alamat').textContent = TOKO.alamat;
 document.title = TOKO.nama;
+
+// ---------- footer ----------
+$('tahun').textContent = new Date().getFullYear();
+$('footer-nama').textContent = TOKO.nama;
+$('link-ig').href = 'https://instagram.com/' + TOKO.instagram;
+$('link-wa').href = 'https://wa.me/' + TOKO.wa;
 
 // ---------- foto (gambar kalau ada, huruf awal kalau tidak) ----------
 function fotoHTML(p) {
@@ -28,30 +41,43 @@ function fotoHTML(p) {
 async function muatProduk() {
   const { data, error } = await db
     .from('products')
-    .select('id,nama,deskripsi,harga,stok,foto')
+    .select('id,nama,deskripsi,harga,stok,foto,is_best')
     .eq('is_active', true)      // wajib: kalau penjual login, RLS bisa menampilkan semua
     .order('id');
   if (error) throw error;
   produk = data;
 }
 
-function render() {
-  if (!produk.length) {
-    grid.innerHTML = '<p class="status">Belum ada produk.</p>';
-    return;
-  }
-  grid.innerHTML = produk.map(p => `
+function kartuHTML(p) {
+  return `
     <button class="kartu ${p.stok < 1 ? 'habis' : ''}" data-id="${p.id}">
-      <div class="foto">${fotoHTML(p)}</div>
-      <div class="info">
-        <h2>${esc(p.nama)}</h2>
-        <p class="harga">${rupiah(p.harga)}</p>
-        <p class="stok">${p.stok < 1 ? 'Stok habis' : 'Stok ' + p.stok}</p>
+      <div class="foto-bulat">
+        <div class="foto">${fotoHTML(p)}</div>
+        <span class="badge-harga">${hargaSingkat(p.harga)}</span>
       </div>
-    </button>`).join('');
+      <h3>${esc(p.nama)}</h3>
+      ${p.stok < 1 ? '<p class="stok">Stok habis</p>' : ''}
+    </button>`;
 }
 
-grid.addEventListener('click', e => {
+function render() {
+  if (!produk.length) {
+    daftar.innerHTML = '<p class="status">Belum ada produk.</p>';
+    return;
+  }
+  const best = produk.filter(p => p.is_best);
+  const lain = produk.filter(p => !p.is_best);
+  let html = '';
+  if (best.length) {
+    html += `<section class="bagian best"><h2>Best Seller</h2><div class="grid">${best.map(kartuHTML).join('')}</div></section>`;
+  }
+  if (lain.length) {
+    html += `<section class="bagian"><h2>${best.length ? 'Menu' : 'Menu kami'}</h2><div class="grid">${lain.map(kartuHTML).join('')}</div></section>`;
+  }
+  daftar.innerHTML = html;
+}
+
+daftar.addEventListener('click', e => {
   const k = e.target.closest('.kartu');
   if (k) bukaModal(Number(k.dataset.id));
 });
@@ -118,12 +144,10 @@ async function kirim(p, f) {
     galat.textContent = error.message || 'Pesanan gagal disimpan. Coba lagi.';
     btn.disabled = false;
     btn.textContent = 'Pesan sekarang';
-    // stok mungkin berubah, segarkan katalog di belakang
-    muatProduk().then(render).catch(() => {});
+    muatProduk().then(render).catch(() => {});   // stok mungkin berubah
     return;
   }
 
-  // Total dihitung ulang dari harga produk yang dimuat (sama dengan yang dipakai server)
   const teks = [
     'Halo, saya mau pesan:',
     `Produk: ${p.nama} x${qty}`,
@@ -143,7 +167,7 @@ modal.addEventListener('close', () => history.replaceState(null, '', location.pa
 
 // ---------- start ----------
 (async () => {
-  grid.innerHTML = '<p class="status">Memuat produk...</p>';
+  daftar.innerHTML = '<p class="status">Memuat produk...</p>';
   try {
     await muatProduk();
     render();
@@ -151,6 +175,6 @@ modal.addEventListener('close', () => history.replaceState(null, '', location.pa
     if (m) bukaModal(Number(m[1]));
   } catch (err) {
     console.error(err);
-    grid.innerHTML = '<p class="status err">Produk gagal dimuat. Periksa koneksi lalu muat ulang halaman.</p>';
+    daftar.innerHTML = '<p class="status err">Produk gagal dimuat. Periksa koneksi lalu muat ulang halaman.</p>';
   }
 })();

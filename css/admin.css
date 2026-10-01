@@ -51,7 +51,8 @@ th { font-size:.8rem; color:var(--muted); font-weight:700; background:#faf1eb; }
 tbody tr:last-child td { border-bottom:0; }
 tr.nonaktif td { opacity:.55; }
 tr.nonaktif td:last-child, tr.nonaktif td:nth-last-child(2) { opacity:1; }
-td.aksi { white-space:nowrap; display:flex; gap:6px; }
+td.aksi { white-space:nowrap; }
+td.aksi .btn + .btn { margin-left:6px; }
 td.kosong { text-align:center; color:var(--muted); padding:32px 14px; }
 td.kosong.err { color:var(--err); }
 .thumb { width:48px; height:48px; border-radius:8px; overflow:hidden; background:#f3e4da; display:grid; place-items:center; font-weight:800; color:var(--brand); }

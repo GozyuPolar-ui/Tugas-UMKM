@@ -11,7 +11,8 @@ const CONFIG = {
   TOKO: {
     nama: 'The Bites & Bliss Cookies',
     tagline: 'Soft cookies dan scoopable cookies dengan isian, dipanggang segar.',
-    alamat: 'Medan, Sumatera Utara',
-    wa: '6281262553605'
+    alamat: 'Medan, Sumatera Utara · IG @thebites_bliss',
+    wa: '6281262553605',
+    instagram: 'thebites_bliss'
   }
 };
