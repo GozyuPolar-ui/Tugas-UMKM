@@ -53,6 +53,8 @@ main { padding:8px 0 40px; }
   color:var(--brand-dark); border:1.5px solid var(--brand-dark); transition:background .15s, color .15s; }
 .sosmed a:hover { background:var(--brand-dark); color:#fff; }
 .sosmed a:focus-visible { outline:3px solid var(--sun); outline-offset:3px; }
+.tautan-dokumen { color:var(--brand-dark); }
+.tautan-dokumen:focus-visible { outline:3px solid var(--sun); outline-offset:3px; }
 .hak-cipta { margin:0; }
 
 /* ---------- modal ---------- */

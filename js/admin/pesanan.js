@@ -1,5 +1,3 @@
-// js/admin/pesanan.js
-// Ringkasan + daftar pesanan + ubah status.
 
 const $ = id => document.getElementById(id);
 const rupiah = n => 'Rp' + Number(n).toLocaleString('id-ID');
